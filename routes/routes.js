@@ -17,6 +17,7 @@ const shotcreate = require( "../controllers/ServiceController/ConcreteProjects/S
 const sidewalk = require( "../controllers/ServiceController/ConcreteProjects/Sidewalk/SidewalkController" );
 const slab = require( "../controllers/ServiceController/ConcreteProjects/Slab/SlabController" );
 const concretedeliveryAreas = require( "../controllers/ServiceController/Concrete Delivery Areas/DeliveryController" );
+const preferredContractors = require( "../controllers/ServiceController/PreferredContractors/PreferredContractorsController" );
 
 // Routes — Instant
 router.get( "/", Instant.getInstant );
@@ -68,10 +69,10 @@ router.delete( "/driveway/:id", driveway.deleteDriveway );
 router.post( "/form", formController.submitForm );
 
 // Routes — Preferred Contractors (from BuildingmaterialsAbout)
-// router.get( "/createPreferredContractor", BuildingmaterialsAbout.getPreferredContractors );
-// router.post( "/preferredcontractors", BuildingmaterialsAbout.createPreferredContractor );
-// router.put( "/preferredcontractors/:id", BuildingmaterialsAbout.updatePreferredContractor );
-// router.delete( "/preferredcontractors/:id", BuildingmaterialsAbout.deletePreferredContractor );
+router.get( "/preferredcontractors", preferredContractors.getPreferredContractors );
+router.post( "/preferredcontractors", upload.single( "heroimg" ), preferredContractors.createPreferredContractor );
+router.put( "/preferredcontractors/:id", upload.single( "heroimg" ), preferredContractors.updatePreferredContractor );
+router.delete( "/preferredcontractors/:id", preferredContractors.deletePreferredContractor );
 
 // Routes — Shotcreate
 router.get( "/shotcreate", shotcreate.getShotcreate );
@@ -86,7 +87,6 @@ router.put( "/sidewalk/:id", upload.single( "heroimg" ), sidewalk.editsidewalk )
 router.delete( "/sidewalk/:id", sidewalk.deletesidewalk );
 
 // Routes — Slab
-
 router.get( "/slab", slab.getSlab );
 router.post( "/slab", upload.single( "heroimg" ), slab.postSlab );
 router.put( "/slab/:id", upload.single( "heroimg" ), slab.editSlab );

@@ -1,11 +1,11 @@
-const preferredContractors = require( "../../../models/ServiceModel/PreferredContractorsModel/PreferredContractorsModel" );
+const PreferredContractors = require( "../../../models/ServiceModel/PreferredContractorsModel/PreferredContractorsModel" );
 
-// GET all preferred contractors
+// GET all Preferred Contractors
 exports.getPreferredContractors = async ( req, res ) =>
 {
   try
   {
-    const contractors = await preferredContractors.find();
+    const contractors = await PreferredContractors.find();
     res.status( 200 ).json( contractors );
   } catch ( error )
   {
@@ -13,52 +13,72 @@ exports.getPreferredContractors = async ( req, res ) =>
   }
 };
 
-// POST create new preferred contractor
+// POST create new Preferred Contractor
 exports.createPreferredContractor = async ( req, res ) =>
 {
   try
   {
-    const newContractor = new preferredContractors( req.body );
-    const saved = await newContractor.save();
+    const data = {
+      ...req.body,
+      heroimg: req?.file?.filename || undefined
+    };
+
+
+    const contractor = new PreferredContractors( data );
+
+
+    const saved = await contractor.save();
+
     res.status( 201 ).json( saved );
   } catch ( error )
   {
+    console.error( "Error creating contractor:", error );
     res.status( 400 ).json( { error: error.message } );
   }
 };
 
-// PUT update preferred contractor by ID
+// PUT update Preferred Contractor by ID
 exports.updatePreferredContractor = async ( req, res ) =>
 {
   try
   {
-    const updated = await preferredContractors.findByIdAndUpdate(
+
+    const data = {
+      ...req.body,
+      ...( req.file && { heroimg: req.file.filename } )
+    };
+
+
+    const updated = await PreferredContractors.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      data,
       { new: true, runValidators: true }
     );
+
     if ( !updated )
     {
-      return res.status( 404 ).json( { error: "Not found" } );
+      return res.status( 404 ).json( { error: "Contractor not found" } );
     }
+
     res.status( 200 ).json( updated );
   } catch ( error )
   {
+    console.error( "Error updating contractor:", error );
     res.status( 400 ).json( { error: error.message } );
   }
 };
 
-// DELETE preferred contractor by ID
+// DELETE Preferred Contractor by ID
 exports.deletePreferredContractor = async ( req, res ) =>
 {
   try
   {
-    const deleted = await preferredContractors.findByIdAndDelete( req.params.id );
+    const deleted = await PreferredContractors.findByIdAndDelete( req.params.id );
     if ( !deleted )
     {
-      return res.status( 404 ).json( { error: "Not found" } );
+      return res.status( 404 ).json( { error: "Contractor not found" } );
     }
-    res.status( 200 ).json( { message: "Deleted successfully" } );
+    res.status( 200 ).json( { message: "Contractor deleted successfully" } );
   } catch ( error )
   {
     res.status( 500 ).json( { error: error.message } );

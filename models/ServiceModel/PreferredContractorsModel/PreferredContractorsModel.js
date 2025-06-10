@@ -1,44 +1,38 @@
 const mongoose = require( "mongoose" );
 
-const itemSchema = new mongoose.Schema( {
-  title: {
-    type: String,
-    required: true
-  },
-  para: {
-    type: String,
-    required: true
-  }
-} );
-
-const connectSchema = new mongoose.Schema( {
-  title2: {
-    type: [ String ],
-    required: true
-  },
-  para2: {
-    type: String,
-    required: true
-  }
-} );
-
 const preferredContractorsSchema = new mongoose.Schema( {
-  title: {
-    type: String,
-    required: true
-  },
-  para: {
-    type: String,
-    required: true
-  },
-  howItWorks: [ itemSchema ],
-  ourPromise: [ itemSchema ],
-  connect: [ connectSchema ],
-  projects: [ connectSchema ],
-  Professionals: [ connectSchema ]
+  herotitle: String,
+  heroimg: String,
+  blacktext: String,
+  red: String,
+  para: String,
+  blacktitle: String,
+  redtitle: String,
+  firstlinetitle: String,
+  firstline: String,
+  secondlinetitle: String,
+  secondline: String,
+  thirdlinetitle: String,
+  thirdline: String,
+  blacktitleone: String,
+  redtitletwo: String,
+  line1title: String,
+  line1: String,
+  line2title: String,
+  line2: String,
+  line3title: String,
+  line3: String,
+  blacktextconnect: String,
+  redtextconnect: String,
+  paraone: String,
+  projectblacktext: String,
+  projectredtext: String,
+  projectpara: String,
+  getmatchedtext: String,
+  concreteredtext: String,
+  paratwo: String,
+  video_link: String
 } );
 
-
-
-const preferredContractors = mongoose.model( "preferredContractors", preferredContractorsSchema );
-module.exports = preferredContractors;
+const preferredcontractor = mongoose.model( "preferredcontractor", preferredContractorsSchema );
+module.exports = preferredcontractor;
