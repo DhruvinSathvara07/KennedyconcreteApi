@@ -1,19 +1,44 @@
 const mongoose = require( "mongoose" );
 
 const commercialSchema = new mongoose.Schema( {
+  // Hero Section
+  heroimg: {
+    type: String,
+    required: false,
+  },
+  herotitle: {
+    type: String,
+    required: false,
+  },
+
+  // Sidewalk Content
   title: {
     type: String,
-    required: true
+    required: false,
   },
   sub_title: {
     type: String,
-    required: true
+    required: false,
   },
   para: {
-    type: [ String ],
-    required: true
-  }
-} );
+    type: String,
+    required: false,
+  },
+
+  // Additional Fields
+  video_link: {
+    type: String,
+    required: false,
+  },
+  btn_text: {
+    type: String,
+    required: false,
+  },
+  btn_link: {
+    type: String,
+    required: false,
+  },
+}, { timestamps: true } );
 
 const commercial = mongoose.model( "commercial", commercialSchema );
 

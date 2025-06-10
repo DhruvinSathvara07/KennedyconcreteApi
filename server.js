@@ -2,37 +2,41 @@ const express = require( "express" );
 const cors = require( "cors" );
 const path = require( "path" );
 const connectDB = require( "./config/db" );
-const formRoutes = require( "./routes/formRoutes" );
-const instantRoutes = require( "./routes/instantRoutes" );
-const about = require( "./routes/aboutRoutes" );
-const contact = require( "./routes/contactRoutes" );
-const concretedeliveryAreas = require( "./routes/concretedeliveryareasRoutes" );
-const sidewalk = require( "./routes/sidewalkRoutes" );
-const driveway = require( "./routes/drivewayRoutes" );
-const slab = require( "./routes/slabRoutes" );
-const cellfill = require( "./routes/cellfillRoutes" );
-const commercial = require( "./routes/commercialRoutes" );
-const shotcreate = require( "./routes/shotcreateRoutes" );
-const decorative = require( "./routes/decoratieRoutes" );
-const aboutBuildingmatarils = require( "./routes/BuildingmaterialsAbout" );
-const preferredcontractor = require( "./routes/PreferredContractorRoutes" );
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+const formRoutes = require( "./routes/routes" );
+const instantRoutes = require( "./routes/routes" );
+const about = require( "./routes/routes" );
+const contact = require( "./routes/routes" );
+const concretedeliveryAreas = require( "./routes/routes" );
+const sidewalk = require( "./routes/routes" );
+const driveway = require( "./routes/routes" );
+const slab = require( "./routes/routes" );
+const cellfill = require( "./routes/routes" );
+const commercial = require( "./routes/routes" );
+const shotcreate = require( "./routes/routes" );
+const decorative = require( "./routes/routes" );
+const aboutBuildingmatarils = require( "./routes/routes" );
+const preferredcontractor = require( "./routes/routes" );
 
 // Middleware
 app.use( cors() );
 app.use( express.json() );
 // Serve static files from uploads directory
 app.use( '/uploads', express.static( path.join( __dirname, 'uploads' ) ) );
+app.use( express.urlencoded( { extended: true } ) );
 
 // Database
 connectDB();
 
+app.use( "/uploads", express.static( "uploads" ) );
 // Routes
 app.get( "/", ( req, res ) =>
 {
   res.send( "Welcome to the kennedyconcrete Server" );
 } );
+
 
 app.use( "/api", formRoutes );
 app.use( "/instant", instantRoutes );

@@ -1,57 +1,122 @@
 const slab = require( "../../../../models/ServiceModel/ConcreteProjects/Slab/SlabModel" );
 
-exports.getslab = async ( req, res ) =>
+// GET all slab entries
+exports.getSlab = async ( req, res ) =>
 {
   try
   {
-    const data = await slab.find(); // ✅ No conflict
+    const data = await slab.find();
     res.status( 200 ).json( data );
   } catch ( error )
   {
-    console.log( error );
+    console.error( "Error fetching slabs:", error );
     res.status( 400 ).json( { error: error.message } );
   }
 };
 
-exports.postslab = async ( req, res ) =>
+// POST (Create) a new slab entry
+exports.postSlab = async ( req, res ) =>
 {
   try
   {
-    const data = req.body;
-    const result = await slab.create( data ); // ✅ No conflict
-    res.status( 200 ).json( result );
+    const {
+      herotitle,
+      title,
+      sub_title,
+      para,
+      video_link,
+      btn_text,
+      btn_link,
+    } = req.body;
+
+    // Multer stores the uploaded file info in req.file
+    const heroimg = req.file ? req.file.filename : null;
+
+    const newSlab = new slab( {
+      heroimg,
+      herotitle,
+      title,
+      sub_title,
+      para,
+      video_link,
+      btn_text,
+      btn_link,
+    } );
+
+    const result = await newSlab.save();
+    res.status( 201 ).json( result );
   } catch ( error )
   {
-    console.log( error );
+    console.error( "Error creating slab:", error );
     res.status( 400 ).json( { error: error.message } );
   }
 };
 
-exports.editslab = async ( req, res ) =>
+// PUT (Update) a slab entry by ID
+exports.editSlab = async ( req, res ) =>
 {
   try
   {
     const { id } = req.params;
-    const data = req.body;
-    const updated = await slab.findByIdAndUpdate( id, data, { new: true } ); // ✅
-    res.status( 200 ).json( updated );
+    const {
+      herotitle,
+      title,
+      sub_title,
+      para,
+      video_link,
+      btn_text,
+      btn_link,
+    } = req.body;
+
+    const updatedData = {
+      herotitle,
+      title,
+      sub_title,
+      para,
+      video_link,
+      btn_text,
+      btn_link,
+    };
+
+    if ( req.file )
+    {
+      updatedData.heroimg = req.file.filename; // update only if a new image is uploaded
+    }
+
+    const updatedSlab = await slab.findByIdAndUpdate( id, updatedData, {
+      new: true,
+    } );
+
+    if ( !updatedSlab )
+    {
+      return res.status( 404 ).json( { message: "Slab not found" } );
+    }
+
+    res.status( 200 ).json( updatedSlab );
   } catch ( error )
   {
-    console.log( error );
+    console.error( "Error updating slab:", error );
     res.status( 400 ).json( { error: error.message } );
   }
 };
 
-exports.deletesslab = async ( req, res ) =>
+// DELETE a slab entry by ID
+exports.deleteSlab = async ( req, res ) =>
 {
   try
   {
     const { id } = req.params;
-    await slab.findByIdAndDelete( id ); // ✅
+    const deleted = await slab.findByIdAndDelete( id );
+
+    if ( !deleted )
+    {
+      return res.status( 404 ).json( { message: "Slab not found" } );
+    }
+
     res.status( 200 ).json( { message: "Deleted successfully" } );
   } catch ( error )
   {
-    console.log( error );
+    console.error( "Error deleting slab:", error );
     res.status( 400 ).json( { error: error.message } );
   }
 };

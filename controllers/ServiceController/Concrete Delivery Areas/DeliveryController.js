@@ -1,11 +1,12 @@
 const serviceConcrete = require( "../../../models/ServiceModel/Concrete Delivery Areas/ConcreteDeliveryAreas" );
 
+// GET
 exports.getConcretedeiveryArea = async ( req, res ) =>
 {
   try
   {
-    const concreteDeliveryAreas = await serviceConcrete.find();
-    res.status( 200 ).json( concreteDeliveryAreas );
+    const data = await serviceConcrete.find();
+    res.status( 200 ).json( data );
   } catch ( error )
   {
     console.log( error );
@@ -13,13 +14,26 @@ exports.getConcretedeiveryArea = async ( req, res ) =>
   }
 };
 
+// POST with image upload
 exports.createConcretedeiveryArea = async ( req, res ) =>
 {
   try
   {
-    const data = req.body;
-    const concreteDeliveryAreas = await serviceConcrete.create( data );
-    res.status( 200 ).json( concreteDeliveryAreas );
+    const { herotitle, title, sub_title, para, video_link, btn_text, btn_link } = req.body;
+    const heroimg = req.file ? req.file.filename : null;
+
+    const newArea = await serviceConcrete.create( {
+      heroimg,
+      herotitle,
+      title,
+      sub_title,
+      para,
+      video_link,
+      btn_text,
+      btn_link,
+    } );
+
+    res.status( 200 ).json( newArea );
   } catch ( error )
   {
     console.log( error );
@@ -27,14 +41,31 @@ exports.createConcretedeiveryArea = async ( req, res ) =>
   }
 };
 
+// PUT with optional image
 exports.editConcretedeiveryArea = async ( req, res ) =>
 {
   try
   {
     const { id } = req.params;
-    const data = req.body;
-    const concreteDeliveryAreas = await serviceConcrete.findByIdAndUpdate( id, data, { new: true } );
-    res.status( 200 ).json( concreteDeliveryAreas );
+    const { herotitle, title, sub_title, para, video_link, btn_text, btn_link } = req.body;
+
+    const updateData = {
+      herotitle,
+      title,
+      sub_title,
+      para,
+      video_link,
+      btn_text,
+      btn_link,
+    };
+
+    if ( req.file )
+    {
+      updateData.heroimg = req.file.filename;
+    }
+
+    const updated = await serviceConcrete.findByIdAndUpdate( id, updateData, { new: true } );
+    res.status( 200 ).json( updated );
   } catch ( error )
   {
     console.log( error );
@@ -42,16 +73,17 @@ exports.editConcretedeiveryArea = async ( req, res ) =>
   }
 };
 
+// DELETE
 exports.deleteConcretedeiveryArea = async ( req, res ) =>
 {
   try
   {
     const { id } = req.params;
-    const concreteDeliveryAreas = await serviceConcrete.findByIdAndDelete( id );
+    await serviceConcrete.findByIdAndDelete( id );
     res.status( 200 ).json( { message: "Deleted successfully" } );
   } catch ( error )
   {
     console.log( error );
     res.status( 400 ).json( { error: error.message } );
   }
-};  
+};
